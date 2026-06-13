@@ -11,7 +11,8 @@ WIFI_PASSWORD = "Your_WiFi_Password"
 TIMEZONE_OFFSET_HOURS = 1 
 
 # --- STATIC IP CONFIGURATION ---
-STATIC_IP_SETTINGS = ("192.168.1.50", "255.255.255.0", "192.168.1.1", "8.8.8.8")
+# Format: (Static_IP, Subnet_Mask, Gateway_IP, DNS_Server)
+STATIC_IP_SETTINGS = ("192.168.0.50", "255.255.255.0", "192.168.0.254", "1.1.1.1")
 
 # --- HARDWARE CONFIGURATION ---
 ZONE_A_PINS = [2, 3]  # Map to your input pins
@@ -30,12 +31,12 @@ for pin_num in ZONE_B_PINS:
 CONFIG = {
     "zone_a": {
         "name": "Zone A (Valves 1 & 2)", "valves": valves_a, "duration_sec": 600, "day_interval": 2,
-        "sched_1_hr": 6, "sched_1_min": 30, "sched_1_en": 1,
-        "sched_2_hr": 18, "sched_2_min": 0, "sched_2_en": 1, "last_watered_day": 0
+        "sched_1_hr": 6, "sched_1_min": 0, "sched_1_en": 1,
+        "sched_2_hr": 18, "sched_2_min": 0, "sched_2_en": 0, "last_watered_day": 0
     },
     "zone_b": {
         "name": "Zone B (Valves 3 & 4)", "valves": valves_b, "duration_sec": 600, "day_interval": 3,
-        "sched_1_hr": 7, "sched_1_min": 30, "sched_1_en": 1,
+        "sched_1_hr": 23, "sched_1_min": 0, "sched_1_en": 1,
         "sched_2_hr": 19, "sched_2_min": 30, "sched_2_en": 0, "last_watered_day": 0
     }
 }
