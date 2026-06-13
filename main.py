@@ -108,9 +108,9 @@ async def connect_and_sync():
             return True
         except:
             log("NTP handshake failed. Retrying in 10s...")
-            for _ in range(10)
-            await asyncio.sleep(1)
-            wdt.feed()
+            for _ in range(10):
+                await asyncio.sleep(1)
+                wdt.feed()
 
 async def execute_watering(zone_id):
     """Asynchronously drives valves, feeding the watchdog during runtime."""
