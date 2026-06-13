@@ -1,3 +1,6 @@
+"""
+Smart irrigation
+"""
 import network
 import ntptime
 import machine
