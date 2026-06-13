@@ -92,9 +92,9 @@ async def connect_and_sync():
         
         if not wlan.isconnected():
             log("Link down. Retrying router in 30 seconds...")
-            for _ in range(30)
-            await asyncio.sleep(1)
-            wdt.feed()
+            for _ in range(30):
+                await asyncio.sleep(1)
+                wdt.feed()
 
     log("Connected successfully! System Address: http://" + str(wlan.ifconfig()[0]))
 
