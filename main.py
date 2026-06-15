@@ -17,17 +17,17 @@ TIMEZONE_OFFSET_HOURS = 2
 STATIC_IP_SETTINGS = ("192.168.0.50", "255.255.255.0", "192.168.0.254", "1.1.1.1")
 
 # --- HARDWARE CONFIGURATION ---
-ZONE_A_PINS = [2, 3]  # Map to your input pins
-ZONE_B_PINS = [4, 5]
+ZONE_A_PINS = [18, 19]  # Map to your input pins
+ZONE_B_PINS = [20, 21]
 
 valves_a = []
 valves_b = []
 
-# CRITICAL SAFETY: Pull pins high instantly to prevent low-level trigger on boot
+# Precautionary: Pull pins low instantly to prevent high-level trigger on boot (although low is the default)
 for pin_num in ZONE_A_PINS:
-    valves_a.append(machine.Pin(pin_num, machine.Pin.OUT, value=1))
+    valves_a.append(machine.Pin(pin_num, machine.Pin.OUT, value=0))
 for pin_num in ZONE_B_PINS:
-    valves_b.append(machine.Pin(pin_num, machine.Pin.OUT, value=1))
+    valves_b.append(machine.Pin(pin_num, machine.Pin.OUT, value=0))
 
 # --- LIVE PARAMETERS (MODIFIABLE VIA WEB INTERFACE) ---
 CONFIG = {
@@ -120,7 +120,7 @@ async def execute_watering(zone_id):
     log("Executing scheduled cycle for " + z["name"])
     for i, valve_pin in enumerate(z["valves"]):
         log("Opening Valve " + str(i+1) + " of " + z["name"])
-        valve_pin.value(0)
+        valve_pin.value(1)
 
         # Safe countdown step segments
         rem = z["duration_sec"]
@@ -129,7 +129,7 @@ async def execute_watering(zone_id):
             wdt.feed()
             rem -= 1
 
-        valve_pin.value(1) # Relay Off
+        valve_pin.value(0) # Relay Off
         log("Safely Closed Valve " + str(i+1))
 
         # Hydraulic line buffer pause
