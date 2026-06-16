@@ -32,12 +32,12 @@ for pin_num in ZONE_B_PINS:
 # --- LIVE PARAMETERS (MODIFIABLE VIA WEB INTERFACE) ---
 CONFIG = {
     "zone_a": {
-        "name": "Zone A", "valves": valves_a, "duration_sec": 600, "day_interval": 1,
+        "name": "Zone A", "valves": valves_a, "duration_min": 10, "day_interval": 1,
         "sched_1_hr": 6, "sched_1_min": 0, "sched_1_en": 1,
         "sched_2_hr": 18, "sched_2_min": 0, "sched_2_en": 0, "last_watered_day": 0
     },
     "zone_b": {
-        "name": "Zone B", "valves": valves_b, "duration_sec": 600, "day_interval": 1,
+        "name": "Zone B", "valves": valves_b, "duration_min": 10, "day_interval": 1,
         "sched_1_hr": 23, "sched_1_min": 0, "sched_1_en": 1,
         "sched_2_hr": 19, "sched_2_min": 30, "sched_2_en": 0, "last_watered_day": 0
     }
@@ -123,7 +123,7 @@ async def execute_watering(zone_id):
         valve_pin.value(1)
 
         # Safe countdown step segments
-        rem = z["duration_sec"]
+        rem = z["duration_min"] * 60
         while rem > 0:
             await asyncio.sleep(1)
             wdt.feed()
@@ -204,7 +204,7 @@ def generate_html_page():
         sfx = "_A" if k == "zone_a" else "_B"
         z = CONFIG[k]
         html = html.replace("{{NAME" + sfx + "}}", z["name"])
-        html = html.replace("{{DUR" + sfx + "}}", str(z["duration_sec"]))
+        html = html.replace("{{DUR" + sfx + "}}", str(z["duration_min"]))
         html = html.replace("{{INT" + sfx + "}}", str(z["day_interval"]))
         html = html.replace("{{S1H" + sfx + "}}", str(z["sched_1_hr"]))
         html = html.replace("{{S1M" + sfx + "}}", str(z["sched_1_min"]))
@@ -250,7 +250,7 @@ async def handle_client(reader, writer):
             p = parse_url_params(path)
             zk = p.get("zone")
             if zk in CONFIG:
-                CONFIG[zk]["duration_sec"] = int(p.get("duration", 600))
+                CONFIG[zk]["duration_min"] = int(p.get("duration", 10))
                 CONFIG[zk]["day_interval"] = int(p.get("interval", 1))
                 CONFIG[zk]["sched_1_hr"] = int(p.get("s1_hr", 6))
                 CONFIG[zk]["sched_1_min"] = int(p.get("s1_mn", 0))
