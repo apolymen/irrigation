@@ -276,7 +276,7 @@ async def handle_client(reader, writer):
         # DEFAULT LANDING SCREEN INDEX
         else:
             response = generate_html_page()
-            writer.write(b"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n")
+            writer.write(b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nConnection: close\r\n\r\n")
             writer.write(response.encode("utf-8"))
             await writer.drain()
 
